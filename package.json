@@ -1,0 +1,23 @@
+{
+  "name": "cpp-meta-data",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "repl": "node --experimental-repl-await --inspect=0.0.0.0"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "execa": "^4.0.3",
+    "talk-to-gdb": "git+ssh://git@github.com/yniks/talk-to-gdb.git",
+    "tmp": "^0.2.1"
+  },
+  "devDependencies": {
+    "@babel/types": "^7.11.5",
+    "@types/node": "^14.11.5",
+    "@types/tmp": "^0.2.0"
+  }
+}
