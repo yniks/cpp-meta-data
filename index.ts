@@ -1,4 +1,3 @@
-import { Arg_Options_requirenments, Arg_responseType, input, response, tree_reponse } from "./types";
 import { TalktoGdb } from "talk-to-gdb"
 import tmp from "tmp"
 import execa from "execa";
