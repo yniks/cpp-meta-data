@@ -3,9 +3,9 @@ declare const _default: {
 };
 export default _default;
 export declare function get_meta(source: {
-    sourcefile: {
+    sourcefiles: ({
         name: string;
-    };
+    })[];
     objectfile: {
         name: string;
     };

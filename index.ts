@@ -5,7 +5,7 @@ const gdb = new TalktoGdb
 var initialized = false
 var basefile: tmp.FileResult
 export default { get_meta }
-export async function get_meta(source: { sourcefile: { name: string }, objectfile: { name: string } }) {
+export async function get_meta(source: { sourcefiles: ({ name: string })[], objectfile: { name: string } }) {
     if (!initialized) {
         basefile = tmp.fileSync()
         await execa.command(`echo "" | cpp -dM - >${basefile.name}`, { shell: true })
@@ -46,9 +46,12 @@ export async function get_meta(source: { sourcefile: { name: string }, objectfil
     }
     async function getMacros() {
         if ("macros" in tree) return tree.macros
-        if ("sourcefile" in source) {
-            var result = await execa.command(` cpp -dM ${source.sourcefile.name} | diff - ${basefile.name} |cat -`, { shell: true })
-            return tree.macros = result.stdout.split("\n").filter(s => s.search("#") > -1).map(s => "#" + s.split("#")[1])
+        if ("sourcefiles" in source) {
+            var result = ""
+            for (let sourcefile of source.sourcefiles) {
+                result += (await execa.command(` cpp -dM ${sourcefile.name} | diff - ${basefile.name} |cat -`, { shell: true })).stdout + '\n'
+            }
+            return tree.macros = result.split("\n").filter(s => s.search("#") > -1).map(s => "#" + s.split("#")[1])
         }
         else return []
     }

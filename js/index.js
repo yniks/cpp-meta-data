@@ -56,9 +56,12 @@ async function get_meta(source) {
     async function getMacros() {
         if ("macros" in tree)
             return tree.macros;
-        if ("sourcefile" in source) {
-            var result = await execa_1.default.command(` cpp -dM ${source.sourcefile.name} | diff - ${basefile.name} |cat -`, { shell: true });
-            return tree.macros = result.stdout.split("\n").filter(s => s.search("#") > -1).map(s => "#" + s.split("#")[1]);
+        if ("sourcefiles" in source) {
+            var result = "";
+            for (let sourcefile of source.sourcefiles) {
+                result += (await execa_1.default.command(` cpp -dM ${sourcefile.name} | diff - ${basefile.name} |cat -`, { shell: true })).stdout + '\n';
+            }
+            return tree.macros = result.split("\n").filter(s => s.search("#") > -1).map(s => "#" + s.split("#")[1]);
         }
         else
             return [];
