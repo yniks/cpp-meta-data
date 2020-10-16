@@ -10,6 +10,7 @@ const execa_1 = __importDefault(require("execa"));
 const gdb = new talk_to_gdb_1.TalktoGdb;
 var initialized = false;
 var basefile;
+exports.default = { get_meta };
 async function get_meta(source) {
     if (!initialized) {
         basefile = tmp_1.default.fileSync();
@@ -22,7 +23,7 @@ async function get_meta(source) {
         if ("variables" in tree)
             return tree.variables;
         if ("objectfile" in source) {
-            await gdb.changeFile(source.objectfile);
+            await gdb.changeFile(source.objectfile.name);
             var result = await gdb.getResult("-symbol-info-variables");
             return tree.variables = result.symbols.debug.map((file) => file.symbols.filter((s) => "line" in s).map((s) => s.description)).flat(); //.messages.map((t: any) => t.name)
         }
@@ -33,7 +34,7 @@ async function get_meta(source) {
         if ("functions" in tree)
             return tree.functions;
         if ("objectfile" in source) {
-            await gdb.changeFile(source.objectfile);
+            await gdb.changeFile(source.objectfile.name);
             var result = await gdb.getResult("-symbol-info-functions");
             return tree.functions = result.symbols.debug.map((file) => file.symbols.filter((s) => "line" in s).map((s) => s.description)).flat(); //.messages.map((t: any) => t.name)
         }
@@ -44,7 +45,7 @@ async function get_meta(source) {
         if ("types" in tree)
             return tree.types;
         if ("objectfile" in source) {
-            await gdb.changeFile(source.objectfile);
+            await gdb.changeFile(source.objectfile.name);
             var result = await gdb.getResult("-symbol-info-types");
             var types = result.symbols.debug.map((file) => file.symbols.filter((s) => "line" in s).map((s) => s.name)).flat(); //.messages.map((t: any) => t.name)
             return tree.types = (await gdb.getResult("-symbol-info-type", ...types)).types;
@@ -56,7 +57,7 @@ async function get_meta(source) {
         if ("macros" in tree)
             return tree.macros;
         if ("sourcefile" in source) {
-            var result = await execa_1.default.command(` cpp -dM ${source.sourcefile} | diff - ${basefile.name} |cat -`, { shell: true });
+            var result = await execa_1.default.command(` cpp -dM ${source.sourcefile.name} | diff - ${basefile.name} |cat -`, { shell: true });
             return tree.macros = result.stdout.split("\n").filter(s => s.search("#") > -1).map(s => "#" + s.split("#")[1]);
         }
         else

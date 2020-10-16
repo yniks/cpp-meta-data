@@ -1,10 +1,11 @@
-import { TalktoGdb } from "talk-to-gdb"
-import tmp from "tmp"
+import { TalktoGdb } from "talk-to-gdb";
+import tmp from "tmp";
 import execa from "execa";
 const gdb = new TalktoGdb
 var initialized = false
 var basefile: tmp.FileResult
-export async function get_meta(source: { sourcefile: string, objectfile: string }) {
+export default { get_meta }
+export async function get_meta(source: { sourcefile: { name: string }, objectfile: { name: string } }) {
     if (!initialized) {
         basefile = tmp.fileSync()
         await execa.command(`echo "" | cpp -dM - >${basefile.name}`, { shell: true })
@@ -16,7 +17,7 @@ export async function get_meta(source: { sourcefile: string, objectfile: string 
         if ("variables" in tree) return tree.variables
         if ("objectfile" in source) {
 
-            await gdb.changeFile(source.objectfile)
+            await gdb.changeFile(source.objectfile.name)
             var result = await gdb.getResult("-symbol-info-variables")
             return tree.variables = result.symbols.debug.map((file: any) => file.symbols.filter((s: any) => "line" in s).map((s: any) => s.description)).flat()//.messages.map((t: any) => t.name)
         }
@@ -26,7 +27,7 @@ export async function get_meta(source: { sourcefile: string, objectfile: string 
         if ("functions" in tree) return tree.functions
         if ("objectfile" in source) {
 
-            await gdb.changeFile(source.objectfile)
+            await gdb.changeFile(source.objectfile.name)
             var result = await gdb.getResult("-symbol-info-functions")
             return tree.functions = result.symbols.debug.map((file: any) => file.symbols.filter((s: any) => "line" in s).map((s: any) => s.description)).flat()//.messages.map((t: any) => t.name)
         }
@@ -36,7 +37,7 @@ export async function get_meta(source: { sourcefile: string, objectfile: string 
         if ("types" in tree) return tree.types
         if ("objectfile" in source) {
 
-            await gdb.changeFile(source.objectfile)
+            await gdb.changeFile(source.objectfile.name)
             var result = await gdb.getResult("-symbol-info-types")
             var types = result.symbols.debug.map((file: any) => file.symbols.filter((s: any) => "line" in s).map((s: any) => s.name)).flat()//.messages.map((t: any) => t.name)
             return tree.types = (await gdb.getResult("-symbol-info-type", ...types)).types
@@ -46,7 +47,7 @@ export async function get_meta(source: { sourcefile: string, objectfile: string 
     async function getMacros() {
         if ("macros" in tree) return tree.macros
         if ("sourcefile" in source) {
-            var result = await execa.command(` cpp -dM ${source.sourcefile} | diff - ${basefile.name} |cat -`, { shell: true })
+            var result = await execa.command(` cpp -dM ${source.sourcefile.name} | diff - ${basefile.name} |cat -`, { shell: true })
             return tree.macros = result.stdout.split("\n").filter(s => s.search("#") > -1).map(s => "#" + s.split("#")[1])
         }
         else return []

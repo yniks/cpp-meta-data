@@ -1,6 +1,14 @@
+declare const _default: {
+    get_meta: typeof get_meta;
+};
+export default _default;
 export declare function get_meta(source: {
-    sourcefile: string;
-    objectfile: string;
+    sourcefile: {
+        name: string;
+    };
+    objectfile: {
+        name: string;
+    };
 }): Promise<{
     getMacros: () => Promise<any>;
     getTypes: () => Promise<any>;
