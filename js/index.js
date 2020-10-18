@@ -59,7 +59,7 @@ async function get_meta(source) {
         if ("sourcefiles" in source) {
             var result = "";
             for (let sourcefile of source.sourcefiles) {
-                result += (await execa_1.default.command(` cpp -dM ${sourcefile.name} | diff - ${basefile.name} |cat -`, { shell: true })).stdout + '\n';
+                result += (await execa_1.default.command(` cpp -dM ${sourcefile.name} |  grep -F -x -v -f ${basefile.name} - | cat -`, { shell: true })).stdout + '\n';
             }
             return tree.macros = result.split("\n").filter(s => s.search("#") > -1).map(s => "#" + s.split("#")[1]);
         }
