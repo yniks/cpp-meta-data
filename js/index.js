@@ -68,10 +68,10 @@ async function get_meta(source) {
     }
     async function makeHeader() {
         var header = "";
-        header += (await getMacros()).join("\n") + '\n';
-        header += (await getTypes()).join("\n") + '\n';
-        header += (await getVariables()).map((s) => `extern ${s}`).join("\n") + '\n';
-        header += (await getFunctions()).map((s) => `extern ${s}`).join("\n") + '\n';
+        header += (await getMacros()).join(";\n") + ';\n';
+        header += (await getTypes()).join(";\n") + ';\n';
+        header += (await getVariables()).map((s) => `extern ${s}`).join(";\n") + ';\n';
+        header += (await getFunctions()).map((s) => `extern ${s}`).join(";\n") + ';\n';
         return header;
     }
     return {

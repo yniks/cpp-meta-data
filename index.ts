@@ -56,10 +56,10 @@ export async function get_meta(source: { sourcefiles: ({ name: string })[], obje
     }
     async function makeHeader() {
         var header = ""
-        header += (await getMacros()).join("\n") + '\n';
-        header += (await getTypes()).join("\n") + '\n';
-        header += (await getVariables()).map((s: string) => `extern ${s}`).join("\n") + '\n';
-        header += (await getFunctions()).map((s: string) => `extern ${s}`).join("\n") + '\n';
+        header += (await getMacros()).join(";\n") + ';\n';
+        header += (await getTypes()).join(";\n") + ';\n';
+        header += (await getVariables()).map((s: string) => `extern ${s}`).join(";\n") + ';\n';
+        header += (await getFunctions()).map((s: string) => `extern ${s}`).join(";\n") + ';\n';
         return header
     }
     return {
