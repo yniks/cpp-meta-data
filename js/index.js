@@ -25,7 +25,7 @@ async function get_meta(source) {
         if ("objectfile" in source) {
             await gdb.changeFile(source.objectfile.name);
             var result = await gdb.getResult("-symbol-info-variables");
-            return tree.variables = result.symbols.debug.map((file) => file.symbols.filter((s) => "line" in s).map((s) => s.description)).flat(); //.messages.map((t: any) => t.name)
+            return tree.variables = result.symbols.debug?.map((file) => file.symbols.filter((s) => "line" in s).map((s) => s.description)).flat() || [];
         }
         else
             return [];
@@ -36,7 +36,7 @@ async function get_meta(source) {
         if ("objectfile" in source) {
             await gdb.changeFile(source.objectfile.name);
             var result = await gdb.getResult("-symbol-info-functions");
-            return tree.functions = result.symbols.debug.map((file) => file.symbols.filter((s) => "line" in s).map((s) => s.description)).flat(); //.messages.map((t: any) => t.name)
+            return tree.functions = result.symbols.debug?.map((file) => file.symbols.filter((s) => "line" in s).map((s) => s.description)).flat() || [];
         }
         else
             return [];
@@ -47,7 +47,7 @@ async function get_meta(source) {
         if ("objectfile" in source) {
             await gdb.changeFile(source.objectfile.name);
             var result = await gdb.getResult("-symbol-info-types");
-            var types = result.symbols.debug.map((file) => file.symbols.filter((s) => "line" in s).map((s) => s.name)).flat(); //.messages.map((t: any) => t.name)
+            var types = result.symbols.debug?.map((file) => file.symbols.filter((s) => "line" in s).map((s) => s.name)).flat() || [];
             return tree.types = (await gdb.getResult("-symbol-info-type", ...types)).types;
         }
         else

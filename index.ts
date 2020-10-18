@@ -19,7 +19,7 @@ export async function get_meta(source: { sourcefiles: ({ name: string })[], obje
 
             await gdb.changeFile(source.objectfile.name)
             var result = await gdb.getResult("-symbol-info-variables")
-            return tree.variables = result.symbols.debug.map((file: any) => file.symbols.filter((s: any) => "line" in s).map((s: any) => s.description)).flat()//.messages.map((t: any) => t.name)
+            return tree.variables = result.symbols.debug?.map((file: any) => file.symbols.filter((s: any) => "line" in s).map((s: any) => s.description)).flat() || []
         }
         else return []
     }
@@ -29,17 +29,16 @@ export async function get_meta(source: { sourcefiles: ({ name: string })[], obje
 
             await gdb.changeFile(source.objectfile.name)
             var result = await gdb.getResult("-symbol-info-functions")
-            return tree.functions = result.symbols.debug.map((file: any) => file.symbols.filter((s: any) => "line" in s).map((s: any) => s.description)).flat()//.messages.map((t: any) => t.name)
+            return tree.functions = result.symbols.debug?.map((file: any) => file.symbols.filter((s: any) => "line" in s).map((s: any) => s.description)).flat() || []
         }
         else return []
     }
     async function getTypes() {
         if ("types" in tree) return tree.types
         if ("objectfile" in source) {
-
             await gdb.changeFile(source.objectfile.name)
             var result = await gdb.getResult("-symbol-info-types")
-            var types = result.symbols.debug.map((file: any) => file.symbols.filter((s: any) => "line" in s).map((s: any) => s.name)).flat()//.messages.map((t: any) => t.name)
+            var types = result.symbols.debug?.map((file: any) => file.symbols.filter((s: any) => "line" in s).map((s: any) => s.name)).flat() || []
             return tree.types = (await gdb.getResult("-symbol-info-type", ...types)).types
         }
         else return []
