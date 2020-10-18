@@ -14,7 +14,7 @@ exports.default = { get_meta };
 async function get_meta(source) {
     if (!initialized) {
         basefile = tmp_1.default.fileSync();
-        await execa_1.default.command(`echo "" | cpp -dM - >${basefile.name}`, { shell: true });
+        await execa_1.default.command(`echo "" | cpp -x c++ -dM - >${basefile.name}`, { shell: true });
         await gdb.loadPlugins();
         initialized = true;
     }
@@ -59,7 +59,7 @@ async function get_meta(source) {
         if ("sourcefiles" in source) {
             var result = "";
             for (let sourcefile of source.sourcefiles) {
-                result += (await execa_1.default.command(` cpp -dM ${sourcefile.name} |  grep -F -x -v -f ${basefile.name} - | cat -`, { shell: true })).stdout + '\n';
+                result += await execa_1.default.command(`echo "" | cpp -x c++ -dM - >${basefile.name}`, { shell: true });
             }
             return tree.macros = result.split("\n").filter(s => s.search("#") > -1).map(s => "#" + s.split("#")[1]);
         }
