@@ -38,8 +38,7 @@ export async function get_meta(source: { sourcefiles: ({ name: string })[], obje
         if ("objectfile" in source) {
             await gdb.changeFile(source.objectfile.name)
             var result = await gdb.getResult("-symbol-info-types2")
-            var types = result.symbols.debug?.map((file: any) => file.symbols.filter((s: any) => "line" in s).map((s: any) => s.name)).flat() || []
-            return tree.types = (await gdb.getResult("-symbol-info-type", ...types)).types
+           return tree.types = result.types
         }
         else return []
     }
