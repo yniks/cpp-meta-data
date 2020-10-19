@@ -8,7 +8,7 @@ export default { get_meta }
 export async function get_meta(source: { sourcefiles: ({ name: string })[], objectfile: { name: string } }) {
     if (!initialized) {
         basefile = tmp.fileSync()
-        await execa.command(`echo "" | cpp -x c++ -dM - >${basefile.name}`, { shell: true })
+        await execa.command(`echo "" | cpp -x c++ -dM - | sort - >${basefile.name}`, { shell: true })
         await gdb.loadPlugins()
         initialized = true
     }
@@ -47,7 +47,7 @@ export async function get_meta(source: { sourcefiles: ({ name: string })[], obje
         if ("sourcefiles" in source) {
             var result = ""
             for (let sourcefile of source.sourcefiles) {
-                result += await execa.command(`cpp -x c++ -dM ${sourcefile.name} | comm -1 -3 <( sort ${basefile.name} ) <( sort - )`, { shell: true });
+                result += await execa.command(`cpp -x c++ -dM ${sourcefile.name} | comm -1 -3 <( sort ${basefile.name} ) <( sort - )`, { shell: "bash" });
             }
             return tree.macros = result.split("\n").filter(s => s.search("#") > -1).map(s => "#" + s.split("#")[1])
         }
