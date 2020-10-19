@@ -47,7 +47,7 @@ export async function get_meta(source: { sourcefiles: ({ name: string })[], obje
         if ("sourcefiles" in source) {
             var result = ""
             for (let sourcefile of source.sourcefiles) {
-                result += await execa.command(`cpp -x c++ -dM ${sourcefile.name} | comm -1 -3 <(sort ${basefile.name}) <(sort -)`, { shell: true });
+                result += await execa.command(`cpp -x c++ -dM ${sourcefile.name} | comm -1 -3 <( sort ${basefile.name} ) <( sort - )`, { shell: true });
             }
             return tree.macros = result.split("\n").filter(s => s.search("#") > -1).map(s => "#" + s.split("#")[1])
         }
