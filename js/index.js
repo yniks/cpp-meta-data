@@ -60,7 +60,7 @@ async function get_meta(source) {
             for (let sourcefile of source.sourcefiles) {
                 result += (await execa_1.default.command(`cpp -x c++ -dM ${sourcefile.name} | comm -1 -3 <( sort ${basefile.name} ) <( sort - )`, { shell: "bash" })).stdout;
             }
-            return tree.macros = result; //.split("\n").filter(s => s.search("#") > -1).map(s => "#" + s.split("#")[1])
+            return tree.macros = result.split("\n");
         }
         else
             return [];
