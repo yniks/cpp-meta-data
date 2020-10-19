@@ -60,14 +60,14 @@ async function get_meta(source) {
             for (let sourcefile of source.sourcefiles) {
                 result += (await execa_1.default.command(`cpp -x c++ -dM ${sourcefile.name} | comm -1 -3 <( sort ${basefile.name} ) <( sort - )`, { shell: "bash" })).stdout;
             }
-            return tree.macros = result.split("\n");
+            return tree.macros = result;
         }
         else
             return [];
     }
     async function makeHeader() {
         var header = "";
-        header += (await getMacros()).join(";\n") + ';\n';
+        header += (await getMacros()) + '\n';
         header += (await getTypes()).join(";\n") + ';\n';
         header += (await getVariables()).map((s) => `extern ${s}`).join(";\n") + ';\n';
         header += (await getFunctions()).map((s) => `extern ${s}`).join(";\n") + ';\n';
