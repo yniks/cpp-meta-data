@@ -46,7 +46,7 @@ async function get_meta(source) {
             return tree.types;
         if ("objectfile" in source) {
             await gdb.changeFile(source.objectfile.name);
-            var result = await gdb.getResult("-symbol-info-type2");
+            var result = await gdb.getResult("-symbol-info-types2");
             var types = result.symbols.debug?.map((file) => file.symbols.filter((s) => "line" in s).map((s) => s.name)).flat() || [];
             return tree.types = (await gdb.getResult("-symbol-info-type", ...types)).types;
         }
