@@ -38,7 +38,7 @@ export async function get_meta(source: { sourcefiles: ({ name: string })[], obje
         if ("objectfile" in source) {
             await gdb.changeFile(source.objectfile.name)
             var result = await gdb.getResult("-symbol-info-types2")
-           return tree.types = result.types
+            return tree.types = result.types
         }
         else return []
     }
@@ -47,7 +47,7 @@ export async function get_meta(source: { sourcefiles: ({ name: string })[], obje
         if ("sourcefiles" in source) {
             var result = ""
             for (let sourcefile of source.sourcefiles) {
-                result += await execa.command(`echo "" | cpp -x c++ -dM - >${basefile.name}`, { shell: true });
+                result += await execa.command(`cpp -x c++ -dM ${sourcefile.name} | comm -1 -3 <(sort ${basefile.name}) <(sort -)`, { shell: true });
             }
             return tree.macros = result.split("\n").filter(s => s.search("#") > -1).map(s => "#" + s.split("#")[1])
         }
