@@ -25,7 +25,7 @@ async function get_meta(source) {
         if ("objectfile" in source) {
             await gdb.changeFile(source.objectfile.name);
             var result = await gdb.getResult("-symbol-info-variables");
-            return tree.variables = result.symbols.debug?.map((file) => file.symbols.filter((s) => "line" in s).map((s) => s.description)).flat() || [];
+            return tree.variables = result.symbols.debug?.map((file) => file.symbols.filter((s) => "line" in s).map((s) => s.description)).flat().reverse() || [];
         }
         else
             return [];
@@ -36,7 +36,7 @@ async function get_meta(source) {
         if ("objectfile" in source) {
             await gdb.changeFile(source.objectfile.name);
             var result = await gdb.getResult("-symbol-info-functions");
-            return tree.functions = result.symbols.debug?.map((file) => file.symbols.filter((s) => "line" in s).map((s) => s.description)).flat() || [];
+            return tree.functions = result.symbols.debug?.map((file) => file.symbols.filter((s) => "line" in s).map((s) => s.description)).flat().reverse() || [];
         }
         else
             return [];
@@ -47,7 +47,7 @@ async function get_meta(source) {
         if ("objectfile" in source) {
             await gdb.changeFile(source.objectfile.name);
             var result = await gdb.getResult("-symbol-info-types2");
-            return tree.types = result.types;
+            return tree.types = result.types.reverse();
         }
         else
             return [];

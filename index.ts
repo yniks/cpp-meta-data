@@ -19,7 +19,7 @@ export async function get_meta(source: { sourcefiles: ({ name: string })[], obje
 
             await gdb.changeFile(source.objectfile.name)
             var result = await gdb.getResult("-symbol-info-variables")
-            return tree.variables = result.symbols.debug?.map((file: any) => file.symbols.filter((s: any) => "line" in s).map((s: any) => s.description)).flat() || []
+            return tree.variables = result.symbols.debug?.map((file: any) => file.symbols.filter((s: any) => "line" in s).map((s: any) => s.description)).flat().reverse() || []
         }
         else return []
     }
@@ -29,7 +29,7 @@ export async function get_meta(source: { sourcefiles: ({ name: string })[], obje
 
             await gdb.changeFile(source.objectfile.name)
             var result = await gdb.getResult("-symbol-info-functions")
-            return tree.functions = result.symbols.debug?.map((file: any) => file.symbols.filter((s: any) => "line" in s).map((s: any) => s.description)).flat() || []
+            return tree.functions = result.symbols.debug?.map((file: any) => file.symbols.filter((s: any) => "line" in s).map((s: any) => s.description)).flat().reverse() || []
         }
         else return []
     }
@@ -38,7 +38,7 @@ export async function get_meta(source: { sourcefiles: ({ name: string })[], obje
         if ("objectfile" in source) {
             await gdb.changeFile(source.objectfile.name)
             var result = await gdb.getResult("-symbol-info-types2")
-            return tree.types = result.types
+            return tree.types = result.types.reverse()
         }
         else return []
     }
