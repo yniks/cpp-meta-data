@@ -68,9 +68,9 @@ async function protoize(sourcefile, objectfile) {
             cs = ns;
             ns = slts.shift();
         }
-        code[slots[cs] + ((Number(def.line) - cs))] = def.def;
+        code[slots[cs] + ((Number(def.line) - cs))] = def.def + ";";
     }
-    var result = { code: code.join(";\n"), info };
+    var result = { code: code.join("\n"), info };
     return result;
 }
 exports.protoize = protoize;
