@@ -56,19 +56,22 @@ async function protoize(sourcefile, objectfile) {
     }
     code.push("");
     var { info } = await get_info({ objectfile: { name: objectfile } }, ["types", "functions", "variables"]);
-    var all = [...info.functions, ...info.variables, ...info.types].filter((def) => def.filename == sourcefile).map((defs) => defs.defs).flat().sort((a, b) => Number(a.line) - Number(b.line));
+    // var all = [...info.functions, ...info.variables, ...info.types].filter((def: any) => def.filename == sourcefile).map((defs: any) => defs.defs).flat().sort((a, b) => Number(a.line) - Number(b.line))
     var slts = Object.keys(slots).map(i => Number(i));
     var cs = slts.shift();
     if (!cs) {
         throw "no slot present , probably, object file is not compiled form given sourcefile";
     }
     var ns = slts.shift();
-    for (let def of all) {
-        if (ns && Number(def.line) >= ns) {
-            cs = ns;
-            ns = slts.shift();
+    for (let each in info) {
+        info[each] = info[each].filter((def) => def.filename == sourcefile).map((defs) => defs.defs).flat().sort((a, b) => Number(a.line) - Number(b.line));
+        for (let def of info[each]) {
+            if (ns && Number(def.line) >= ns) {
+                cs = ns;
+                ns = slts.shift();
+            }
+            code[slots[cs] + ((Number(def.line) - cs))] = (each == 'types' ? "" : "extern") + def.def + ";";
         }
-        code[slots[cs] + ((Number(def.line) - cs))] = def.def + ";";
     }
     var result = { code: code.join("\n"), info };
     return result;
