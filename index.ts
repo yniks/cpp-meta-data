@@ -57,7 +57,7 @@ export async function protoize(sourcefile: string, objectfile: string) {
         }
         code[slots[cs] + ((Number(def.line) - cs))] = def.def
     }
-    var result = { code: code.join("\n"), info }
+    var result = { code: code.join(";\n"), info }
     return result
 }
 export function fixWrapping(s: string) {
