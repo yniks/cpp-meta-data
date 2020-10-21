@@ -58,7 +58,7 @@ export async function protoize(sourcefile: string, objectfile: string) {
                 cs = ns
                 ns = slts.shift()
             }
-            code[slots[cs] + ((Number(def.line) - cs))] = (each == 'types' ? "" : "extern") + def.def + ";"
+            code[slots[cs] + ((Number(def.line) - cs))] = (each == 'types' ? "" : "extern ") + def.def + ";"
         }
     }
     var result = { code: code.join("\n"), info }
