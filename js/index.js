@@ -135,7 +135,7 @@ function fixWrapping(s) {
     }
     statements.push(s.slice(finishedtill, i).trim());
     var result = [];
-    var pack = (i, t) => `void __method__${i}() {\n${t}}; static int __variable__${i} = __method__${i}();`;
+    var pack = (i, t) => `int  __method__${i}() {  ${t}}; static int __variable__${i} = __method__${i}();`;
     for (var i = 0; i < statements.length; i++) {
         if (statements[i].search(/^if/) > -1) { //if
             if (statements[i + 1]?.search(/^else/) > -1) {
