@@ -6,17 +6,18 @@ This project is a utility tool that provides functionalities related to C++ code
 
 To install the `cpp-meta-data` package, you can use npm:
 
-bashCopy code
 
-`npm install cpp-meta-data` 
+
+```bash
+npm install cpp-meta-data
+``` 
 
 ## Usage
 
 ### Preprocessing C++ Code
 
-typescriptCopy code
 
-```
+```typescript
 import { cpp } from "cpp-meta-data";
 
 const preprocessedCode = await cpp("source.cpp");` 
@@ -26,9 +27,9 @@ This function preprocesses the given C++ file and returns the preprocessed code 
 
 ### Formatting C++ Code
 
-typescriptCopy code
 
-```import { pretty } from "cpp-meta-data";
+```typescript
+import { pretty } from "cpp-meta-data";
 
 const formattedCode = await pretty("source.cpp");
 ```
@@ -36,9 +37,8 @@ This function formats the given C++ code using `clang-format` and returns the fo
 
 ### Getting File Information
 
-typescriptCopy code
 
-```
+```typescript
 import { get_info } from "cpp-meta-data";
 
 const fileInfo = await get_info({ objectfile: { name: "object.o" } }, ["functions", "variables", "types"]);
@@ -47,9 +47,8 @@ This function retrieves information about functions, variables, and types from t
 
 ### Generating Metadata
 
-typescriptCopy code
 
-```
+```typescript
 import { protoize } from "cpp-meta-data";
 
 const metadata = await protoize("source.cpp", "object.o");
@@ -59,9 +58,8 @@ This function generates metadata from the specified source file and object file,
 
 ### Fixing Wrapping
 
-typescriptCopy code
 
-```
+```typescript
 import { fixWrapping } from "cpp-meta-data";
 
 const fixedCode = fixWrapping("source.cpp");
